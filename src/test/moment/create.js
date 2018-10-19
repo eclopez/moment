@@ -128,10 +128,6 @@ test('cloning respects moment.momentProperties', function (assert) {
     moment.momentProperties.pop();
 });
 
-test('undefined', function (assert) {
-    assert.ok(moment().toDate() instanceof Date, 'undefined');
-});
-
 test('iso with bad input', function (assert) {
     assert.ok(!moment('a', moment.ISO_8601).isValid(), 'iso parsing with invalid string');
     assert.ok(!moment('a', moment.ISO_8601, true).isValid(), 'iso parsing with invalid string, strict');
@@ -892,15 +888,19 @@ test('parsing iso with more subsecond precision digits', function (assert) {
     assert.equal(moment.utc('2013-07-31T22:00:00.0000000Z').format(), '2013-07-31T22:00:00Z', 'more than 3 subsecond digits');
 });
 
-test('null or empty', function (assert) {
+test('null, empty or undefined', function (assert) {
     assert.equal(moment('').isValid(), false, 'moment(\'\') is not valid');
     assert.equal(moment(null).isValid(), false, 'moment(null) is not valid');
-    assert.equal(moment(null, 'YYYY-MM-DD').isValid(), false, 'moment(\'\', \'format\') is not valid');
+    assert.equal(moment(undefined).isValid(), false,  'moment(undefined) is not valid');
     assert.equal(moment('', 'YYYY-MM-DD').isValid(), false, 'moment(\'\', \'format\') is not valid');
+    assert.equal(moment(null, 'YYYY-MM-DD').isValid(), false, 'moment(null, \'format\') is not valid');
+    assert.equal(moment(undefined, 'YYYY-MM-DD').isValid(), false,  'moment(undefined, \'format\') is not valid');
     assert.equal(moment.utc('').isValid(), false, 'moment.utc(\'\') is not valid');
     assert.equal(moment.utc(null).isValid(), false, 'moment.utc(null) is not valid');
-    assert.equal(moment.utc(null, 'YYYY-MM-DD').isValid(), false, 'moment.utc(null) is not valid');
-    assert.equal(moment.utc('', 'YYYY-MM-DD').isValid(), false, 'moment.utc(\'\', \'YYYY-MM-DD\') is not valid');
+    assert.equal(moment.utc(undefined).isValid(), false,  'moment.utc(undefined) is not valid');
+    assert.equal(moment.utc('', 'YYYY-MM-DD').isValid(), false, 'moment.utc(\'\', \'format\') is not valid');
+    assert.equal(moment.utc(null, 'YYYY-MM-DD').isValid(), false, 'moment.utc(null, \'format\') is not valid');
+    assert.equal(moment.utc(undefined, 'YYYY-MM-DD').isValid(), false, 'moment.utc(undefined, \'format\') is not valid');
 });
 
 test('first century', function (assert) {
